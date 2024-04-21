@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Form</title>
+</head>
+<body>
+    <h1>Stack is last in, first out.</h1>
+    <h2>But I also have a friend <a href="queue.html" target="_blank">queue</a>.</h2>
+    <h2>Enter your email:</h2>
+    <form th:action="@{/addEmail}" method="post" id="emailForm">
+        <input type="email" id="emailInput" name="email" placeholder="Enter your email" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("emailForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var email = document.getElementById("emailInput").value;
+            
+            fetch("/addEmail", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("response").innerText = data;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
